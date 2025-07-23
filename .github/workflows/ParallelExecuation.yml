@@ -22,6 +22,8 @@ jobs:
       image: ${{ matrix.container }}
 
     runs-on: ubuntu-latest
+    env:
+      HOME: /root  # Set the HOME environment variable to /root to fix the Firefox launch issue
 
     steps:
       - name: Checkout code

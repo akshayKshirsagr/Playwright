@@ -1,5 +1,5 @@
-const { test, expect } = require("@playwright/test");
-const exp = require("constants");
+import { test, expect } from '@playwright/test';
+
 
 test("01_batch2_verify the successful sumbission of details", async ({ browser }) => {
 
