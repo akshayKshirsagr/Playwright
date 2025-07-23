@@ -1,0 +1,49 @@
+name: Parallel Playwright Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    # Run this job in parallel for each container defined in the matrix
+    strategy:
+      fail-fast: false
+      matrix:
+        container: [
+          mcr.microsoft.com/playwright:v1.45.1-jammy,
+          mcr.microsoft.com/playwright:v1.45.1-focal
+        ]
+
+    # Use each container image defined above
+    container:
+      image: ${{ matrix.container }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.container }}
+          path: playwright-report
