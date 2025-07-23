@@ -47,5 +47,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report-${{ matrix.container }}
+          name: playwright-report-${{ matrix.container | replace(':', '-') }}-${{ matrix.shard }}
           path: playwright-report
